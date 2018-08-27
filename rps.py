@@ -8,6 +8,7 @@ moves = ['rock', 'paper', 'scissors']
 """The Player class is the parent class for all of the Players
 in this game"""
 
+import random
 
 class Player:
     def move(self):
@@ -32,6 +33,12 @@ class Game:
         move1 = self.p1.move()
         move2 = self.p2.move()
         print(f"Player 1: {move1}  Player 2: {move2}")
+        if move1 == move2:
+            print("Tie")
+        elif beats(move1, move2):
+            print("Player 1 wins!")
+        else:
+            print("Player 2 wins!")
         self.p1.learn(move1, move2)
         self.p2.learn(move2, move1)
 
