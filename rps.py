@@ -51,6 +51,14 @@ class Game:
             print("Player 2 wins!")
             return "player2"
 
+    def tiebreaker(self, score):
+        print("Score is tied. Entering tiebreaker round to determine winner.")
+        while score['player1'] == score['player2']:
+            winner = self.play_round()
+            if winner != None:
+                score[winner] = score[winner] + 1
+        return score
+
     def play_game(self):
         score = {"player1" : 0, "player2" : 0}
         print("Game start!")
@@ -59,6 +67,8 @@ class Game:
             winner = self.play_round()
             if winner != None:
                 score[winner] = score[winner] + 1
+        if score['player1'] == score['player2']:
+            score = self.tiebreaker(score)
         print(f"Game over! Score is Player 1: {score['player1']} and Player 2: {score['player2']}.")
 
 
