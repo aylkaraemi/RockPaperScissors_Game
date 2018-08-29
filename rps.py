@@ -12,7 +12,7 @@ import random
 
 class Player:
     def move(self):
-        return 'rock'
+        return 'rock'        
 
     def learn(self, my_move, their_move):
         pass
@@ -24,14 +24,20 @@ def beats(one, two):
             (one == 'paper' and two == 'rock'))
 
 
+def valid_move(move, moves):
+    while move not in moves:
+        move = input(f"{move}? That doesn't make sense. Pick a new move: ")
+    return move
+
+
 class Game:
     def __init__(self, p1, p2):
         self.p1 = p1
         self.p2 = p2
 
     def play_round(self):
-        move1 = self.p1.move()
-        move2 = self.p2.move()
+        move1 = valid_move(self.p1.move(), moves)
+        move2 = valid_move(self.p2.move(), moves)
         print(f"Player 1: {move1}  Player 2: {move2}")
         if move1 == move2:
             print("Tie")
