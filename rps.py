@@ -12,42 +12,35 @@ import random
 
 class Player:
     def move(self):
-        #return 'rock'
-        return random.choice(moves)
+        pass
 
     def learn(self, my_move, their_move):
         pass
 
-class Human (Player):
+class Human(Player):
     def __init__(self):
         self.name = input("Greetings player! What is your name? ")
 
     def move(self):
         return input("What is your move? ")
 
-class Rock (Player):
+class Rock(Player):
     def __init__(self):
         self.name = "Toph Beifong"
 
     def move(self):
         return 'rock'
 
-    def learn(self, my_move, their_move):
-        pass
-
-class Random (Player):
+class Random(Player):
     def __init__(self):
         self.name = "Random Frequent Flyer Dent"
 
     def move(self):
         return random.choice(moves)
 
-    def learn(self, my_move, their_move):
-        pass
-
-class Cycle (Player):
+class Cycle(Player):
     def __init__(self):
-        self.name = random.choice(["Agrajag", "Aang", "Korra", "Ouroboros", "Dave Lister"])
+        self.name = "Agrajag"
         self.prev_move = 'scissors'
 
     def move(self):
@@ -56,6 +49,17 @@ class Cycle (Player):
 
     def learn(self, my_move, their_move):
         self.prev_move = my_move
+
+class Mimic(Player):
+    def __init__(self):
+        self.name = "Raven Darkhölme"
+        self.opponent_move = 'scissors'
+
+    def move(self):
+        return self.opponent_move
+
+    def learn(self, my_move, their_move):
+        self.opponent_move = their_move
 
 
 def beats(one, two):
@@ -114,5 +118,5 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game(Human(), Cycle())
+    game = Game(Human(), Mimic())
     game.play_game()
