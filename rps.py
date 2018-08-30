@@ -18,13 +18,19 @@ class Player:
     def learn(self, my_move, their_move):
         pass
 
-
 class Rock (Player):
     def __init__(self):
         self.name = "Toph Beifong"
 
     def move(self):
         return 'rock'
+
+class Random (Player):
+    def __init__(self):
+        self.name = "Random Frequent Flyer Dent"
+
+    def move(self):
+        return random.choice(moves)
 
 
 def beats(one, two):
@@ -83,5 +89,5 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game(Player(), Rock())
+    game = Game(Random(), Rock())
     game.play_game()
