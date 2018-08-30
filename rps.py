@@ -69,7 +69,7 @@ class Game:
             self.keep_score(score)
         if score['player1'] == score['player2']:
             self.tiebreaker(score)
-        print(f"Game over! Score is Player 1: {score['player1']} and Player 2: {score['player2']}.")
+        print(f"Rounds complete! Final score is Player 1: {score['player1']} and Player 2: {score['player2']}.")
 
 
 if __name__ == '__main__':
