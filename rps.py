@@ -32,12 +32,30 @@ class Rock (Player):
     def move(self):
         return 'rock'
 
+    def learn(self, my_move, their_move):
+        pass
+
 class Random (Player):
     def __init__(self):
         self.name = "Random Frequent Flyer Dent"
 
     def move(self):
         return random.choice(moves)
+
+    def learn(self, my_move, their_move):
+        pass
+
+class Cycle (Player):
+    def __init__(self):
+        self.name = random.choice(["Agrajag", "Aang", "Korra", "Ouroboros", "Dave Lister"])
+        self.prev_move = 'scissors'
+
+    def move(self):
+        index = (moves.index(self.prev_move) + 1) % len(moves)
+        return moves[index]
+
+    def learn(self, my_move, their_move):
+        self.prev_move = my_move
 
 
 def beats(one, two):
@@ -96,5 +114,5 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game(Human(), Rock())
+    game = Game(Human(), Cycle())
     game.play_game()
