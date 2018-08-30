@@ -26,8 +26,10 @@ def beats(one, two):
 
 
 def valid_move(move, moves):
+    move = move.lower()
     while move not in moves:
         move = input(f"{move}? That doesn't make sense. Pick a new move: ")
+        move = move.lower()
     return move
 
 
