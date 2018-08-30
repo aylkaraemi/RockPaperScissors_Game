@@ -19,6 +19,14 @@ class Player:
         pass
 
 
+class Rock (Player):
+    def __init__(self):
+        self.name = "Toph Beifong"
+
+    def move(self):
+        return 'rock'
+
+
 def beats(one, two):
     return ((one == 'rock' and two == 'scissors') or
             (one == 'scissors' and two == 'paper') or
@@ -73,5 +81,5 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game(Player(), Player())
+    game = Game(Player(), Rock())
     game.play_game()
