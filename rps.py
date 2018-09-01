@@ -40,7 +40,7 @@ class Random(Player):
 
 class Cycle(Player):
     def __init__(self):
-        self.name = "Agrajag"
+        self.name = random.choice(["Agrajag", "Aang", "Korra", "Dave Lister", "Jane"])
         self.prev_move = 'scissors'
 
     def move(self):
@@ -52,7 +52,7 @@ class Cycle(Player):
 
 class Mimic(Player):
     def __init__(self):
-        self.name = "Raven Darkhölme"
+        self.name = random.choice(["Raven Darkhölme", "Braling Two", "Stephen Byerley"])
         self.opponent_move = 'scissors'
 
     def move(self):
@@ -60,6 +60,22 @@ class Mimic(Player):
 
     def learn(self, my_move, their_move):
         self.opponent_move = their_move
+
+class Strategic(Player):
+    def __init__(self):
+        self.name = random.choice(["Harbinger", "Jeeves", "SCORPIO"])
+        self.losing_move = random.choice(moves)
+
+    def move(self):
+        return self.losing_move
+
+    def learn(self, my_move, their_move):
+        if my_move == their_move:
+            self.losing_move = random.choice(moves)
+        elif beats(my_move, their_move):
+            self.losing_move = their_move
+        else:
+            self.losing_move = my_move
 
 
 def beats(one, two):
@@ -118,5 +134,5 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game(Human(), Mimic())
+    game = Game(Human(), Strategic())
     game.play_game()
