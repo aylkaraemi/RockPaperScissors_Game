@@ -19,7 +19,7 @@ class Player:
 
 class Human(Player):
     def __init__(self):
-        self.name = input("Greetings player! What is your name? ")
+        self.name = input("Greetings Gentlebeing! What is your name? ")
 
     def move(self):
         return input("What is your move? ")
@@ -92,17 +92,44 @@ def valid_move(move, moves):
     return move
 
 
+def game_type():
+    type = input("You can play a single game of rock paper scissors or a  tournament. Let me know what you would prefer. \n Type 'g' if you would like to play a single game or 't' if you would like to play a tournament. \n")
+    while type.lower() != 'g' and type.lower() != 't':
+        type = input("I'm afraid your response was invalid. \n Please type 'g' to play a single game or 't' if you would prefer a tournament. \n")
+    return type
+
+
+def create_opponent():
+    opponent_type = random.choice(['rock', 'random', 'cycle', 'mimic', 'strategic'])
+    if type == 'rock':
+        return Rock()
+    elif type == 'random':
+        return Random()
+    elif type == 'cycle':
+        return Cycle()
+    elif type == 'mimic':
+        return Mimic()
+    else:
+        return Strategic()
+
+
+def play_tournament():
+    pass
+
+
 class Game:
     def __init__(self, p1, p2):
         self.p1 = p1
+        self.name1 = p1.name
         self.p2 = p2
+        self.name2 = p2.name
 
     def play_round(self):
         move1 = valid_move(self.p1.move(), moves)
         move2 = valid_move(self.p2.move(), moves)
         self.p1.learn(move1, move2)
         self.p2.learn(move2, move1)
-        print(f"Player 1: {move1}  Player 2: {move2}")
+        print(f"{self.name1}: {move1}  {self.name2}: {move2}")
         if move1 == move2:
             print("Tie")
         elif beats(move1, move2):
@@ -134,5 +161,11 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game(Human(), Strategic())
-    game.play_game()
+    player1 = Human()
+    tournament = game_type()
+    if tournament == "t":
+        play_tournament()
+    else:
+        player2 = create_opponent()
+        game = Game(player1, player2)
+        game.play_game()
