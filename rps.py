@@ -93,7 +93,7 @@ def valid_move(move, moves):
 
 
 def game_type():
-    type = input("You can play a single game of rock paper scissors or a  tournament. Let me know what you would prefer. \nType 'g' if you would like to play a single game or 't' if you would like to play a tournament. \n")
+    type = input("\nYou can play a single game of rock paper scissors or a  tournament. Let me know what you would prefer. \nType 'g' if you would like to play a single game or 't' if you would like to play a tournament. \n")
     while type.lower() != 'g' and type.lower() != 't':
         type = input("I'm afraid your response was invalid. \n Please type 'g' to play a single game or 't' if you would prefer a tournament. \n")
     return type
@@ -125,6 +125,29 @@ def choose_opponents(players):
     return p1, p2
 
 
+def tourney_round(players, wins, losses):
+    winners = []
+    losers = []
+    while len(players) > 1:
+        opponent1, opponent2 = choose_opponents(players)
+        game = Game(opponent1, opponent2)
+        winner, loser = game.play_game()
+        winners.append(winner)
+        losers.append(loser)
+        losses[loser] += 1
+        wins[winner] += 1
+    if players:
+        losers.append(players[0])
+    return winners, losers
+
+
+def elimination(losers, losses, eliminated):
+    for loser in losers:
+        if losses[loser] == 3:
+            losers.pop(losers.index(loser))
+            eliminated.append(loser)
+            print(f"{loser.name} has been eliminated\n")
+
 def play_tournament():
     player2 = Rock()
     player3 = Random()
@@ -134,24 +157,24 @@ def play_tournament():
     wins = {player1 : 0, player2 : 0, player3 : 0, player4 : 0, player5 : 0, player6: 0}
     losses = {player1 : 0, player2 : 0, player3 : 0, player4 : 0, player5 : 0, player6: 0}
     players = [player1, player2, player3, player4, player5, player6]
-    winners = []
-    print("Tournament Begin:\n")
+    eliminated = []
     round = 1
-    while len(players) > 1:
-        opponent1, opponent2 = choose_opponents(players)
-        game = Game(opponent1, opponent2)
-        print(f"Game {round}")
-        winner, loser = game.play_game()
-        winners.append(winner)
-        players.append(loser)
-        losses[loser] += 1
-        wins[winner] += 1
-        round += 1
-        if losses[loser] == 3:
-            players.pop(players.index(loser))
-        if len(players) <= 1 and winners:
-            for player in winners:
-                players.append(player)
+    print(f"Tournament Begin:\nTourney Round {round}\n")
+    winners, losers = tourney_round(players, wins, losses)
+    round += 1
+    while len(eliminated) < 5:
+        elimination(losers, losses, eliminated)
+        print(f"Tourney Round{round}\n")
+        if len(winners) >= 2 and len(losers) >=2:
+            winners1, losers1 = tourney_round(winners, wins, losses)
+            winners2, losers2 = tourney_round(losers, wins, losses)
+            winners = winners1 + winners2
+            losers = losers1 + losers2
+        else:
+            players = winners + losers
+            winners, losers = tourney_round(players, wins, losses)
+        round +=1
+    winner = winners[0]# fix this, it is possible to have an empty list when all are eliminated.
     print(f"Tournament Over!\nWinner is {winner.name}! \n\nScores were:\n{player1.name}: {wins[player1]} wins and {losses[player1]} losses \n{player2.name}: {wins[player2]} wins and {losses[player2]} losses \n{player3.name}: {wins[player3]} wins and {losses[player3]} losses \n{player4.name}: {wins[player4]} wins and {losses[player4]} losses \n{player5.name}: {wins[player5]} wins and {losses[player5]} losses \n{player6.name}: {wins[player6]} wins and {losses[player6]} losses\n\n")
 
 
@@ -178,9 +201,16 @@ class Game:
             return "player2"
 
     def tiebreaker(self, score):
+        rounds = 0
         print("Score is tied. Entering tiebreaker round to determine winner.")
         while score['player1'] == score['player2']:
             self.keep_score(score)
+            rounds += 1
+            if rounds == 10:
+                print("Game is still tied, winner will be chosen by coin flip.")
+                winner = random.choice(['player1', 'player2'])
+                score[winner] +=1
+
 
     def keep_score(self, score):
         winner = self.play_round()
