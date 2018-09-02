@@ -99,6 +99,10 @@ def game_type():
     return type
 
 
+def game_variant():
+    pass
+
+
 def create_opponent():
     opponent_type = random.choice(['rock', 'random', 'cycle', 'mimic', 'strategic'])#put the list here since rubric said do not use global variables except for moves. Let me know if I should move the list of player subclasses to a global variable
     if type == 'rock':
@@ -113,8 +117,32 @@ def create_opponent():
         return Strategic()
 
 
+def choose_opponents(players):
+    p1 = random.choice(players)
+    players.pop(players.index(p1))
+    p2 = random.choice(players)
+    players.pop(players.index(p2))
+    return p1, p2
+
+
 def play_tournament():
-    pass
+    player2 = Rock()
+    player3 = Random()
+    player4 = Cycle()
+    player5 = Mimic()
+    player6 = Strategic()
+    players = [player1, player2, player3, player4, player5, player6]
+    print("Tournament Begin:\n")
+    round = 1
+    while len(players) > 1:
+        opponent1, opponent2 = choose_opponents(players)
+        print(players)
+        game = Game(opponent1, opponent2)
+        print(f"Game {round}\n")
+        winner = game.play_game()
+        players.append(winner)
+        round += 1
+    print(f"Tournament Over!\nWinner is {winner.name}")
 
 
 class Game:
@@ -158,10 +186,10 @@ class Game:
         if score['player1'] == score['player2']:
             self.tiebreaker(score)
         if score['player1'] > score['player2']:
-            winner = type(self.p1)
+            winner = self.p1
             winner_name = self.name1
         else:
-            winner = type(self.p2)
+            winner = self.p2
             winner_name = self.name2
         print(f"Rounds complete! \nFinal score is {self.name1} {score['player1']} and {self.name2}: {score['player2']}. \nThe winner is {winner_name}!")
         return winner
