@@ -100,7 +100,7 @@ def game_type():
 
 
 def create_opponent():
-    opponent_type = random.choice(['rock', 'random', 'cycle', 'mimic', 'strategic'])
+    opponent_type = random.choice(['rock', 'random', 'cycle', 'mimic', 'strategic'])#put the list here since rubric said do not use global variables except for moves. Let me know if I should move the list of player subclasses to a global variable
     if type == 'rock':
         return Rock()
     elif type == 'random':
@@ -164,6 +164,7 @@ class Game:
             winner = type(self.p2)
             winner_name = self.name2
         print(f"Rounds complete! \nFinal score is {self.name1} {score['player1']} and {self.name2}: {score['player2']}. \nThe winner is {winner_name}!")
+        return winner
 
 
 if __name__ == '__main__':
