@@ -133,10 +133,10 @@ class Game:
         if move1 == move2:
             print("Tie")
         elif beats(move1, move2):
-            print("Player 1 wins!")
+            print(f"{self.name1} wins!")
             return "player1"
         else:
-            print("Player 2 wins!")
+            print(f"{self.name2} wins!")
             return "player2"
 
     def tiebreaker(self, score):
@@ -157,7 +157,13 @@ class Game:
             self.keep_score(score)
         if score['player1'] == score['player2']:
             self.tiebreaker(score)
-        print(f"Rounds complete! Final score is Player 1: {score['player1']} and Player 2: {score['player2']}.")
+        if score['player1'] > score['player2']:
+            winner = type(self.p1)
+            winner_name = self.name1
+        else:
+            winner = type(self.p2)
+            winner_name = self.name2
+        print(f"Rounds complete! \nFinal score is {self.name1} {score['player1']} and {self.name2}: {score['player2']}. \nThe winner is {winner_name}!")
 
 
 if __name__ == '__main__':
