@@ -121,7 +121,7 @@ def choose_opponents(players):
     p1 = random.choice(players)
     players.pop(players.index(p1))
     p2 = random.choice(players)
-    players.append(p1)
+    players.pop(players.index(p2))
     return p1, p2
 
 
@@ -134,6 +134,7 @@ def play_tournament():
     wins = {player1 : 0, player2 : 0, player3 : 0, player4 : 0, player5 : 0, player6: 0}
     losses = {player1 : 0, player2 : 0, player3 : 0, player4 : 0, player5 : 0, player6: 0}
     players = [player1, player2, player3, player4, player5, player6]
+    winners = []
     print("Tournament Begin:\n")
     round = 1
     while len(players) > 1:
@@ -141,11 +142,16 @@ def play_tournament():
         game = Game(opponent1, opponent2)
         print(f"Game {round}")
         winner, loser = game.play_game()
+        winners.append(winner)
+        players.append(loser)
         losses[loser] += 1
         wins[winner] += 1
+        round += 1
         if losses[loser] == 3:
             players.pop(players.index(loser))
-        round += 1
+        if len(players) <= 1 and winners:
+            for player in winners:
+                players.append(player)
     print(f"Tournament Over!\nWinner is {winner.name}! \n\nScores were:\n{player1.name}: {wins[player1]} wins and {losses[player1]} losses \n{player2.name}: {wins[player2]} wins and {losses[player2]} losses \n{player3.name}: {wins[player3]} wins and {losses[player3]} losses \n{player4.name}: {wins[player4]} wins and {losses[player4]} losses \n{player5.name}: {wins[player5]} wins and {losses[player5]} losses \n{player6.name}: {wins[player6]} wins and {losses[player6]} losses\n\n")
 
 
