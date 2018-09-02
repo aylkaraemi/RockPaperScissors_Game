@@ -121,7 +121,7 @@ def choose_opponents(players):
     p1 = random.choice(players)
     players.pop(players.index(p1))
     p2 = random.choice(players)
-    players.pop(players.index(p2))
+    players.append(p1)
     return p1, p2
 
 
@@ -131,18 +131,22 @@ def play_tournament():
     player4 = Cycle()
     player5 = Mimic()
     player6 = Strategic()
+    wins = {player1 : 0, player2 : 0, player3 : 0, player4 : 0, player5 : 0, player6: 0}
+    losses = {player1 : 0, player2 : 0, player3 : 0, player4 : 0, player5 : 0, player6: 0}
     players = [player1, player2, player3, player4, player5, player6]
     print("Tournament Begin:\n")
     round = 1
     while len(players) > 1:
         opponent1, opponent2 = choose_opponents(players)
-        print(players)
         game = Game(opponent1, opponent2)
-        print(f"Game {round}\n")
-        winner = game.play_game()
-        players.append(winner)
+        print(f"Game {round}")
+        winner, loser = game.play_game()
+        losses[loser] += 1
+        wins[winner] += 1
+        if losses[loser] == 3:
+            players.pop(players.index(loser))
         round += 1
-    print(f"Tournament Over!\nWinner is {winner.name}")
+    print(f"Tournament Over!\nWinner is {winner.name}! \n\nScores were:\n{player1.name}: {wins[player1]} wins and {losses[player1]} losses \n{player2.name}: {wins[player2]} wins and {losses[player2]} losses \n{player3.name}: {wins[player3]} wins and {losses[player3]} losses \n{player4.name}: {wins[player4]} wins and {losses[player4]} losses \n{player5.name}: {wins[player5]} wins and {losses[player5]} losses \n{player6.name}: {wins[player6]} wins and {losses[player6]} losses\n\n")
 
 
 class Game:
@@ -159,12 +163,12 @@ class Game:
         self.p2.learn(move2, move1)
         print(f"{self.name1}: {move1}  {self.name2}: {move2}")
         if move1 == move2:
-            print("Tie")
+            print("Tie\n")
         elif beats(move1, move2):
-            print(f"{self.name1} wins!")
+            print(f"{self.name1} wins!\n")
             return "player1"
         else:
-            print(f"{self.name2} wins!")
+            print(f"{self.name2} wins!\n")
             return "player2"
 
     def tiebreaker(self, score):
@@ -179,20 +183,22 @@ class Game:
 
     def play_game(self):
         score = {"player1" : 0, "player2" : 0}
-        print("Game start!")
-        for round in range(3):
+        print(f"{self.name1} vs {self.name2}\n")
+        for round in range(1, 4):
             print(f"Round {round}:")
             self.keep_score(score)
         if score['player1'] == score['player2']:
             self.tiebreaker(score)
         if score['player1'] > score['player2']:
             winner = self.p1
+            loser = self.p2
             winner_name = self.name1
         else:
             winner = self.p2
+            loser = self.p1
             winner_name = self.name2
-        print(f"Rounds complete! \nFinal score is {self.name1} {score['player1']} and {self.name2}: {score['player2']}. \nThe winner is {winner_name}!")
-        return winner
+        print(f"Rounds complete! \nFinal score is {self.name1} {score['player1']} and {self.name2}: {score['player2']}. \nThe winner is {winner_name}!\n\n")
+        return winner, loser
 
 
 if __name__ == '__main__':
