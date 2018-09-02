@@ -93,7 +93,7 @@ def valid_move(move, moves):
 
 
 def game_type():
-    type = input("You can play a single game of rock paper scissors or a  tournament. Let me know what you would prefer. \n Type 'g' if you would like to play a single game or 't' if you would like to play a tournament. \n")
+    type = input("You can play a single game of rock paper scissors or a  tournament. Let me know what you would prefer. \nType 'g' if you would like to play a single game or 't' if you would like to play a tournament. \n")
     while type.lower() != 'g' and type.lower() != 't':
         type = input("I'm afraid your response was invalid. \n Please type 'g' to play a single game or 't' if you would prefer a tournament. \n")
     return type
@@ -169,10 +169,17 @@ class Game:
 
 if __name__ == '__main__':
     player1 = Human()
-    tournament = game_type()
-    if tournament == "t":
-        play_tournament()
-    else:
-        player2 = create_opponent()
-        game = Game(player1, player2)
-        game.play_game()
+    play = "y"
+    while play == "y" or play == "yes":
+        tournament = game_type()
+        if tournament == "t":
+            play_tournament()
+        else:
+            player2 = create_opponent()
+            game = Game(player1, player2)
+            game.play_game()
+        play = input(f"\n{player1.name}, would you like to play again? (y/n) ")
+        play = play.lower()
+        while play != "y" and play != "n" and play != "yes" and play != "no":
+            play = input("I'm sorry I don't understand that input. \nPlease type y if you wish to play again or n if you would like to quit. ")
+    print("Farewell!")
