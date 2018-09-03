@@ -3,15 +3,17 @@
 """This program plays a game of Rock, Paper, Scissors between two Players,
 and reports both Player's scores each round."""
 
-std_moves = ['rock', 'paper', 'scissors']
+standard = ['rock', 'paper', 'scissors']
 
-rpsls = ['rock', 'paper', 'scissors', 'lizard', 'Spock']
+RPSLS = ['rock', 'paper', 'scissors', 'lizard', 'Spock']
 
-pokemon = ['Charmander', 'Bulbasaur', 'Squirtle']
+Pokemon = ['Charmander', 'Bulbasaur', 'Squirtle']
 
-bear = ['bear', 'Hunter', 'Ninja']
+BearHunterNinja = ['bear', 'Hunter', 'Ninja']
 
-lovecraft = ['Cthulhu', 'Elder Sign', 'Cultist']
+Lovecraft = ['Cthulhu', 'Elder Sign', 'Cultist']
+
+variants = ['standard', 'rpsls', 'pokemon', 'bhn', 'lovecraft']
 
 
 """The Player class is the parent class for all of the Players
@@ -87,7 +89,7 @@ class Strategic(Player):
             self.losing_move = my_move
 
 
-def beats(one, two):
+def beats(one, two, variant):
     return ((one == 'rock' and two == 'scissors') or
             (one == 'scissors' and two == 'paper') or
             (one == 'paper' and two == 'rock'))
@@ -96,7 +98,7 @@ def beats(one, two):
 def valid_move(move, moves):
     move = move.lower()
     while move not in moves:
-        move = input(f"{move}? That doesn't make sense. Pick a new move: ")
+        move = input(f"{move}? That doesn't match any choices. \nPlease choose again: ")
         move = move.lower()
     return move
 
@@ -109,7 +111,29 @@ def game_type():
 
 
 def game_variant():
-    pass
+    print("This game allows you to play different variants of rock paper scissors.\n")
+    variant = input("Please select which variant you would like to play. \nFor standard rock paper scissors, enter: standard \nFor Rock-Paper-Scissors-Lizard-Spock, enter: rpsls \nFor Bear-Hunter-Ninja, enter: bhn \nFor the Pokemon themed variant, enter: pokemon \nFor the Lovecraftian themed variant, enter: lovecraft \n\n")
+    variant = valid_move(variant, variants)
+    rules(variant)
+    return variant
+
+def rules(variant):
+    need_rules = input(f"Do you need to know the rules for the {variant} moves? (y/n) \n")
+    while need_rules != 'y' and need_rules != 'n':
+        need_rules = input("I'm sorry, I don't understand. \nPlease type 'y' or 'n' if you need to know the rules for this variant. \n")
+    if need_rules == 'y':
+        if variant == 'standard':
+            print("Rock smashes Scissors \nPaper covers Rock \nScissors cuts Paper\n\n")
+        if variant == 'rpsls':
+            print("Rock smashes Scissors and crushes Lizard \nPaper covers Rock and disproves Spock \n Scissors cuts Paper and decapitates Lizard \nLizard eats paper and poisons Spock \nSpock smashes Scissors and vaporizes Rock\n\n")
+        if variant == 'pokemon':
+            print("Charmander defeats Bulbasaur \nBulbasaur defeats Squirtle \nSquirtle defeats Charmander\n\n")
+        if variant == 'bhn':
+            print("Bear eats Ninja \nNinja kills Hunter \nHunter shoots Bear\n\n")
+        if variant == 'lovecraft':
+            print("Cthulhu eats Cultist \nCultist destroys Elder Sign \nElder Sign traps Cthulhu\n\n")
+    else:
+        print("Then enjoy your game!")
 
 
 def create_opponent():
@@ -134,7 +158,7 @@ def choose_opponents(players):
     return p1, p2
 
 
-def tourney_round(players, wins, losses):
+def tourney_round(players, wins, losses, moves):
     winners = []
     losers = []
     while len(players) > 1:
@@ -157,7 +181,7 @@ def elimination(losers, losses, eliminated):
             eliminated.append(loser)
             print(f"{loser.name} has been eliminated\n")
 
-def play_tournament():
+def play_tournament(moves):
     player2 = Rock()
     player3 = Random()
     player4 = Cycle()
@@ -169,19 +193,19 @@ def play_tournament():
     eliminated = []
     round = 1
     print(f"Tournament Begin:\nTourney Round {round}\n")
-    winners, losers = tourney_round(players, wins, losses)
+    winners, losers = tourney_round(players, wins, losses, moves)
     round += 1
     while len(eliminated) < 5:
         elimination(losers, losses, eliminated)
         print(f"Tourney Round{round}\n")
         if len(winners) >= 2 and len(losers) >=2:
-            winners1, losers1 = tourney_round(winners, wins, losses)
-            winners2, losers2 = tourney_round(losers, wins, losses)
+            winners1, losers1 = tourney_round(winners, wins, losses, moves)
+            winners2, losers2 = tourney_round(losers, wins, losses, moves)
             winners = winners1 + winners2
             losers = losers1 + losers2
         else:
             players = winners + losers
-            winners, losers = tourney_round(players, wins, losses)
+            winners, losers = tourney_round(players, wins, losses, moves)
         round +=1
     players = winners + losers
     winner = players[0]
@@ -189,11 +213,12 @@ def play_tournament():
 
 
 class Game:
-    def __init__(self, p1, p2):
+    def __init__(self, p1, p2, variant):
         self.p1 = p1
         self.name1 = p1.name
         self.p2 = p2
         self.name2 = p2.name
+        moves = variant
 
     def play_round(self):
         move1 = valid_move(self.p1.move(), moves)
@@ -250,6 +275,7 @@ class Game:
 if __name__ == '__main__':
     player1 = Human()
     play = "y"
+    variant = game_variant()
     while play == "y" or play == "yes":
         tournament = game_type()
         if tournament == "t":
