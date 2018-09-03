@@ -174,7 +174,8 @@ def play_tournament():
             players = winners + losers
             winners, losers = tourney_round(players, wins, losses)
         round +=1
-    winner = winners[0]# fix this, it is possible to have an empty list when all are eliminated.
+    players = winners + losers
+    winner = players[0]
     print(f"Tournament Over!\nWinner is {winner.name}! \n\nScores were:\n{player1.name}: {wins[player1]} wins and {losses[player1]} losses \n{player2.name}: {wins[player2]} wins and {losses[player2]} losses \n{player3.name}: {wins[player3]} wins and {losses[player3]} losses \n{player4.name}: {wins[player4]} wins and {losses[player4]} losses \n{player5.name}: {wins[player5]} wins and {losses[player5]} losses \n{player6.name}: {wins[player6]} wins and {losses[player6]} losses\n\n")
 
 
