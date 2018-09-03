@@ -9,6 +9,10 @@ rpsls = ['rock', 'paper', 'scissors', 'lizard', 'Spock']
 
 pokemon = ['Charmander', 'Bulbasaur', 'Squirtle']
 
+bear = ['bear', 'Hunter', 'Ninja']
+
+lovecraft = ['Cthulhu', 'Elder Sign', 'Cultist']
+
 
 """The Player class is the parent class for all of the Players
 in this game"""
