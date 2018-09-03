@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+import random
+# !/usr/bin/env python3
 
 """This program plays a game of Rock, Paper, Scissors between two Players,
 and reports both Player's scores each round."""
@@ -19,7 +20,6 @@ variants = ['standard', 'rpsls', 'pokemon', 'bhn', 'lovecraft']
 """The Player class is the parent class for all of the Players
 in this game"""
 
-import random
 
 class Player:
     def move(self):
@@ -28,12 +28,14 @@ class Player:
     def learn(self, my_move, their_move):
         pass
 
+
 class Human(Player):
     def __init__(self):
         self.name = input("Greetings Gentlebeing! What is your name? ")
 
     def move(self):
         return input("What is your move? ")
+
 
 class Rock(Player):
     def __init__(self, variant):
@@ -50,6 +52,7 @@ class Rock(Player):
         if self.variant == 'lovecraft':
             return 'Elder Sign'
 
+
 class Random(Player):
     def __init__(self, moves):
         self.name = "Random Frequent Flyer Dent"
@@ -58,9 +61,11 @@ class Random(Player):
     def move(self):
         return random.choice(self.moves)
 
+
 class Cycle(Player):
     def __init__(self, moves):
-        self.name = random.choice(["Agrajag", "Aang", "Korra", "Dave Lister", "Jane"])
+        self.name = random.choice(["Agrajag", "Aang", "Korra",
+                                   "Dave Lister", "Jane"])
         self.moves = moves
         self.prev_move = random.choice(self.moves)
 
@@ -71,9 +76,11 @@ class Cycle(Player):
     def learn(self, my_move, their_move):
         self.prev_move = my_move
 
+
 class Mimic(Player):
     def __init__(self, moves):
-        self.name = random.choice(["Raven Darkhölme", "Braling Two", "Stephen Byerley"])
+        self.name = random.choice(["Raven Darkhölme", "Braling Two",
+                                   "Stephen Byerley"])
         self.moves = moves
         self.opponent_move = random.choice(self.moves)
 
@@ -82,6 +89,7 @@ class Mimic(Player):
 
     def learn(self, my_move, their_move):
         self.opponent_move = their_move
+
 
 class Strategic(Player):
     def __init__(self, moves, variant):
@@ -116,7 +124,7 @@ def beats(one, two, variant):
                 (one == 'scissors' and two == 'lizard') or
                 (one == 'lizard' and two == 'paper') or
                 (one == 'lizard' and two == 'spock') or
-                (one == 'spock' and two =='scissors') or
+                (one == 'spock' and two == 'scissors') or
                 (one == 'spock' and two == 'rock'))
     if variant == 'pokemon':
         return ((one == 'charmander' and two == 'bulbasaur') or
@@ -135,40 +143,80 @@ def beats(one, two, variant):
 def valid_move(move, moves):
     move = move.lower()
     while move not in moves:
-        move = input(f"{move}? That doesn't match any choices. \nPlease choose again from the following options: \n{moves} \n")
+        print(f"{move}? That doesn't match any choices.\n")
+        move = input(f"""Please choose again from the following options:
+                    {moves} \n""")
         move = move.lower()
     return move
 
 
 def game_type():
-    type = input("\nYou can play a single game of rock paper scissors or a  tournament. Let me know what you would prefer. \nType 'g' if you would like to play a single game or 't' if you would like to play a tournament. \n")
+    print("\nYou can play a single game or a tournament. " +
+          "Let me know what you would prefer.")
+    type = input("Type 'g' if you would like to play a single game or " +
+                 "'t' if you would like to play a tournament. \n")
     while type.lower() != 'g' and type.lower() != 't':
-        type = input("I'm afraid your response was invalid. \n Please type 'g' to play a single game or 't' if you would prefer a tournament. \n")
+        print("I'm afraid your response was invalid.")
+        type = input("Please type 'g' to play a single game " +
+                     "or 't' if you would prefer a tournament. \n")
     return type
 
 
 def game_variant():
-    print("This game allows you to play different variants of rock paper scissors.\n")
-    variant = input("Please select which variant you would like to play. \nFor standard rock paper scissors, enter: standard \nFor Rock-Paper-Scissors-Lizard-Spock, enter: rpsls \nFor Bear-Hunter-Ninja, enter: bhn \nFor the Pokemon themed variant, enter: pokemon \nFor the Lovecraftian themed variant, enter: lovecraft \n\n")
+    print("This game allows you to play different variants of" +
+          "rock paper scissors.\n")
+    variant = input("""Please select which variant you would like to play:\n
+                    For standard rock paper scissors, enter: standard
+                    For Rock-Paper-Scissors-Lizard-Spock, enter: rpsls
+                    For Bear-Hunter-Ninja, enter: bhn
+                    For the Pokemon themed variant, enter: pokemon
+                    For the Lovecraftian themed variant, enter: lovecraft
+                    \n""")
     variant = valid_move(variant, variants)
     rules(variant)
     return variant
 
+
 def rules(variant):
-    need_rules = input(f"Do you need to know the rules for the {variant} moves? (y/n) \n")
+    need_rules = input("Do you need to know the rules for the " +
+                       f"""{variant} variant? (y/n) \n""")
     while need_rules != 'y' and need_rules != 'n':
-        need_rules = input("I'm sorry, I don't understand. \nPlease type 'y'if you need to know the rules for this variant or 'n' to skip. \n")
+        print("I'm sorry, I don't understand.")
+        need_rules = input("Please type 'y' if you need to know the " +
+                           "rules for this variant or 'n' to skip. \n")
     if need_rules == 'y':
         if variant == 'standard':
-            print("Rock smashes Scissors \nPaper covers Rock \nScissors cuts Paper\n\n")
+            print("""
+                    Rock smashes Scissors
+                    Paper covers Rock
+                    Scissors cuts Paper\n\n
+                    """)
         elif variant == 'rpsls':
-            print("Rock smashes Scissors and crushes Lizard \nPaper covers Rock and disproves Spock \nScissors cuts Paper and decapitates Lizard \nLizard eats paper and poisons Spock \nSpock smashes Scissors and vaporizes Rock\n\n")
+            print("""
+                    Rock smashes Scissors and crushes Lizard
+                    Paper covers Rock and disproves Spock
+                    Scissors cuts Paper and decapitates Lizard
+                    Lizard eats paper and poisons Spock
+                    Spock smashes Scissors and vaporizes Rock\n\n
+                    """)
         elif variant == 'pokemon':
-            print("Charmander defeats Bulbasaur \nBulbasaur defeats Squirtle \nSquirtle defeats Charmander\n\n")
+            print("""
+                    Charmander defeats Bulbasaur
+                    Bulbasaur defeats Squirtle
+                    Squirtle defeats Charmander\n\n
+                    """)
         elif variant == 'bhn':
-            print("Bear eats Ninja \nNinja kills Hunter \nHunter shoots Bear\n\n")
+            print("""
+                    Bear eats Ninja
+                    Ninja kills Hunter
+                    Hunter shoots Bear\n\n
+                    """)
         else:
-            print("Cthulhu eats Cultist \nCultist destroys Elder Sign \nElder Sign imprisons Cthulhu\n\n")
+            print("""
+                    Cthulhu eats Cultist
+                    Cultist destroys Elder Sign
+                    Elder Sign imprisons Cthulhu\n\n
+                    """)
     else:
         print("Then enjoy your game!")
 
@@ -187,7 +235,8 @@ def move_set(variant):
 
 
 def create_opponent(moves, variant):
-    opponent_type = random.choice(['rock', 'random', 'cycle', 'mimic', 'strategic'])#put the list here since rubric said do not use global variables except for moves. Let me know if I should move the list of player subclasses to a global variable
+    opponent_type = random.choice(['rock', 'random', 'cycle',
+                                   'mimic', 'strategic'])
     if type == 'rock':
         return Rock(variant)
     elif type == 'random':
@@ -231,13 +280,19 @@ def elimination(losers, score, eliminated):
             eliminated.append(loser)
             print(f"{loser.name} has been eliminated\n")
 
+
 def play_tournament(moves, variant):
     player2 = Rock(variant)
     player3 = Random(moves)
     player4 = Cycle(moves)
     player5 = Mimic(moves)
     player6 = Strategic(moves, variant)
-    score = {player1 : [0, 0], player2 : [0, 0], player3 : [0, 0], player4 : [0, 0], player5 : [0, 0], player6: [0, 0]}
+    score = {player1: [0, 0],
+             player2: [0, 0],
+             player3: [0, 0],
+             player4: [0, 0],
+             player5: [0, 0],
+             player6: [0, 0]}
     players = [player1, player2, player3, player4, player5, player6]
     eliminated = []
     round = 1
@@ -247,7 +302,7 @@ def play_tournament(moves, variant):
     while len(eliminated) < 5:
         elimination(losers, score, eliminated)
         print(f"Tourney Round{round}\n")
-        if len(winners) >= 2 and len(losers) >=2:
+        if len(winners) >= 2 and len(losers) >= 2:
             winners1, losers1 = tourney_round(winners, score, moves, variant)
             winners2, losers2 = tourney_round(losers, score, moves, variant)
             winners = winners1 + winners2
@@ -255,10 +310,22 @@ def play_tournament(moves, variant):
         else:
             players = winners + losers
             winners, losers = tourney_round(players, score, moves, variant)
-        round +=1
+        round += 1
     players = winners + losers
     winner = players[0]
-    print(f"Tournament Over!\nWinner is {winner.name}! \n\nScores were:\n{player1.name}: {score[player1][0]} wins and {score[player1][1]} losses \n{player2.name}: {score[player2][0]} wins and {score[player2][1]} losses \n{player3.name}: {score[player3][0]} wins and {score[player3][1]} losses \n{player4.name}: {score[player4][0]} wins and {score[player4][1]} losses \n{player5.name}: {score[player5][0]} wins and {score[player5][1]} losses \n{player6.name}: {score[player6][0]} wins and {score[player6][1]} losses\n\n")
+    print(f"""Tournament Over!\nWinner is {winner.name}! \nScores were:
+          {player1.name}: {score[player1][0]} wins and """ +
+          f"""{score[player1][1]} losses
+          {player2.name}: {score[player2][0]} wins and """ +
+          f"""{score[player2][1]} losses
+          {player3.name}: {score[player3][0]} wins and """ +
+          f"""{score[player3][1]} losses
+          {player4.name}: {score[player4][0]} wins and """ +
+          f"""{score[player4][1]} losses
+          {player5.name}: {score[player5][0]} wins and """ +
+          f"""{score[player5][1]} losses
+          {player6.name}: {score[player6][0]} wins and """ +
+          f"""{score[player6][1]} losses\n\n""")
 
 
 class Game:
@@ -287,23 +354,22 @@ class Game:
 
     def tiebreaker(self, score):
         rounds = 0
-        print("Score is tied. Entering tiebreaker round to determine winner.")
+        print("Score is tied. Entering tiebreaker mode to determine winner.")
         while score['player1'] == score['player2']:
             self.keep_score(score)
             rounds += 1
             if rounds == 10:
-                print("Game is still tied, winner will be chosen by coin flip.")
+                print("Game is still tied, winner will be chosen at random.")
                 winner = random.choice(['player1', 'player2'])
-                score[winner] +=1
-
+                score[winner] += 1
 
     def keep_score(self, score):
         winner = self.play_round()
-        if winner != None:
+        if winner is not None:
             score[winner] = score[winner] + 1
 
     def play_game(self):
-        score = {"player1" : 0, "player2" : 0}
+        score = {"player1": 0, "player2": 0}
         print(f"{self.name1} vs {self.name2}\n")
         for round in range(1, 4):
             print(f"Round {round}:")
@@ -318,7 +384,10 @@ class Game:
             winner = self.p2
             loser = self.p1
             winner_name = self.name2
-        print(f"Rounds complete! \nFinal score is {self.name1} {score['player1']} and {self.name2}: {score['player2']}. \nThe winner is {winner_name}!\n\n")
+        print(f"""Rounds complete!\n
+              Final score is {self.name1}: {score['player1']} and """ +
+              f"""{self.name2}: {score['player2']}.
+              \nThe winner is {winner_name}!\n\n""")
         return winner, loser
 
 
@@ -338,5 +407,7 @@ if __name__ == '__main__':
         play = input(f"\n{player1.name}, would you like to play again? (y/n) ")
         play = play.lower()
         while play != "y" and play != "n" and play != "yes" and play != "no":
-            play = input("I'm sorry I don't understand that input. \nPlease type y if you wish to play again or n if you would like to quit. ")
+            play = input("""I'm sorry I don't understand that input.
+                         Please type 'y' if you wish to play again""" +
+                         f""" or 'n' if you would like to quit.""")
     print("Farewell!")
