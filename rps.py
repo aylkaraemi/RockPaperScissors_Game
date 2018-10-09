@@ -382,7 +382,7 @@ if __name__ == '__main__':
     play = "y"
     while play == "y" or play == "yes":
         variant = game_variant()
-        moves = move_set(variant)    
+        moves = move_set(variant)
         tournament = game_type()
         if tournament == "t":
             play_tournament(moves, variant)
@@ -397,4 +397,3 @@ if __name__ == '__main__':
                          Please type 'y' if you wish to play again""" +
                          f""" or 'n' if you would like to quit.""")
     print("Farewell!")
-
