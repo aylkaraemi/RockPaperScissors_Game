@@ -27,7 +27,11 @@ Lovecraft = {
             'elder sign': ['cthulhu'],
             'cultist': ['elder sign']}
 
-variants = ['standard', 'rpsls', 'pokemon', 'bhn', 'lovecraft']
+variants = {'standard': standard,
+            'rpsls': RPSLS,
+            'pokemon': Pokemon,
+            'bhn': BearHunterNinja,
+            'lovecraft': Lovecraft}
 
 
 """The Player class is the parent class for all of the Players
@@ -159,7 +163,7 @@ def game_variant():
                     For the Pokemon themed variant, enter: pokemon
                     For the Lovecraftian themed variant, enter: lovecraft
                     \n""")
-    variant = valid_move(variant, variants)
+    variant = valid_move(variant, variants.keys())
     rules(variant)
     return variant
 
@@ -209,16 +213,7 @@ def rules(variant):
 
 
 def move_set(variant):
-    if variant == 'standard':
-        return standard
-    if variant == 'rpsls':
-        return RPSLS
-    if variant == 'pokemon':
-        return Pokemon
-    if variant == 'bhn':
-        return BearHunterNinja
-    if variant == 'lovecraft':
-        return Lovecraft
+    return variants[variant]
 
 
 def create_opponent(moves, variant):
